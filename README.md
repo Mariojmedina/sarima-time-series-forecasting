@@ -54,6 +54,31 @@ monthly seasonality, making it a good example for a SARIMA model【8526513308965
 You can substitute your own time–series by providing a CSV file with a
 timestamp column and a numeric target column.
 
+## Time‑series decomposition
+
+Before fitting a SARIMA model it is often helpful to *decompose* your
+series into interpretable parts.  In the notebook we call
+`statsmodels.tsa.seasonal_decompose()` to break the data down into four
+components:
+
+- **Observed** – the original time series values.  This is simply the
+  data you collected.
+- **Trend** – the smooth, long‑term increase or decrease in the series.
+  For example, a rise in airline passenger numbers over several years
+  represents the trend component【767530250736748†L92-L119】.
+- **Seasonal** – the repeating short‑term cycles that occur at regular
+  intervals, such as monthly spikes in sales or weekly patterns in
+  website traffic【71951480220652†L119-L127】.  A series may have multiple
+  seasonalities (e.g., daily and yearly).
+- **Residual (random)** – the irregular fluctuations left after
+  removing the trend and seasonality.  These residuals capture random
+  noise and unexpected events【71951480220652†L141-L149】.
+
+Decomposition is an exploratory tool: plotting these components helps
+you verify that a SARIMA model is appropriate.  If the trend or
+seasonal parts are strong, SARIMA can model them directly; if little
+structure remains, the residuals should look like white noise.
+
 ## Running the script
 
 The `train_sarima.py` script loads the data, fits a SARIMA model with
@@ -102,6 +127,63 @@ identify a simpler model that still explains the data well【706520277493290†L
 In the notebook and script you can modify the `--order` and
 `--seasonal_order` arguments to try different combinations and inspect
 the resulting BIC printed in the model summary.
+
+## Statistical assumptions
+
+SARIMA inherits the assumptions of ARIMA models.  To produce valid
+forecasts the following conditions should hold:
+
+1. **Stationarity** – after differencing (the `d` and `D` orders) the
+   series should have constant mean and variance over time【767530250736748†L48-L53】.
+   You can check stationarity using unit‑root tests or by inspecting
+   plots of the differenced series.
+2. **Uncorrelated residuals** – the residuals of the fitted model
+   should be uncorrelated and resemble white noise; otherwise the
+   model has not captured all structure.  Researchers typically plot
+   the residual autocorrelation function (ACF) and histogram to
+   confirm that the residuals are uncorrelated and approximately
+   normally distributed【460460745925883†L403-L406】.
+3. **Correct specification** – SARIMA assumes a linear relationship
+   between past values and errors【263046113061295†L265-L281】 and operates
+   on a single variable; multivariate relationships are not handled.
+
+If these assumptions are violated, forecasts may be biased or the
+prediction intervals too narrow.  You can attempt to resolve
+violations by additional differencing, including exogenous regressors,
+or switching to more flexible models.
+
+## Calculating AIC and BIC
+
+The Akaike information criterion (AIC) and Bayesian information
+criterion (BIC) quantify the trade‑off between model fit and
+complexity.  Lower values indicate a more parsimonious model that
+still explains the data well【706520277493290†L360-L367】.  Both metrics are
+defined in terms of the maximized log‑likelihood \(\widehat{L}\) and the
+number of estimated parameters \(k\):
+
+- **AIC:** \(\mathrm{AIC} = 2k - 2\ln(\widehat{L})\)【702523714920972†L177-L183】.
+- **BIC:** \(\mathrm{BIC} = k\ln(n) - 2\ln(\widehat{L})\) where \(n\) is the
+  number of observations【111783523217317†L210-L226】.
+
+Both criteria penalise complexity, but BIC uses the sample size
+\(\ln(n)\) as its penalty term and therefore penalises large models more
+heavily; it tends to favour simpler models when \(n\) is large.
+
+**Example:** suppose you fit two SARIMA models on 100 monthly
+observations and obtain maximum log‑likelihood values of \(-350\) and
+\(-345\) with 5 and 8 parameters, respectively.  The AIC and BIC are
+calculated as follows:
+
+| Model | Parameters (k) | Log‑likelihood \(\widehat{L}\) | AIC | BIC |
+|------|---------------|-------------------------------|-----|-----|
+| Model A | 5 | \(-350\) | \(2\cdot 5 - 2\times(-350) = 710\) | \(5\ln(100) - 2\times(-350) \approx 723.0\) |
+| Model B | 8 | \(-345\) | \(2\cdot 8 - 2\times(-345) = 706\) | \(8\ln(100) - 2\times(-345) \approx 737.2\) |
+
+Although Model B has a higher log‑likelihood (it fits the training
+data better), its BIC is higher due to the larger number of
+parameters.  Model A would be preferred according to BIC because it
+balances fit and parsimony.  In practice you compare AIC/BIC across
+candidate models and choose the one with the lowest value.
 
 ### Linear model and hybrids
 
