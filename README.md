@@ -118,12 +118,12 @@ information criteria.
 When comparing different SARIMA configurations, it is important not to
 add too many parameters.  Too many AR or MA terms can lead to
 overfitting – the model may fit the training data well but generalise
-poorly to new observations【455193929966286†L378-L385】.  To objectively compare
+poorly to new observations.  To objectively compare
 models, one can compute the **Bayesian information criterion (BIC)** or
 **Akaike information criterion (AIC)** for each candidate.  These
 metrics balance model fit and complexity; lower values indicate a
 better trade‑off, and comparing BIC values across models helps to
-identify a simpler model that still explains the data well【706520277493290†L360-L367】.
+identify a simpler model that still explains the data well.
 In the notebook and script you can modify the `--order` and
 `--seasonal_order` arguments to try different combinations and inspect
 the resulting BIC printed in the model summary.
