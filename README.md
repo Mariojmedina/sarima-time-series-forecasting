@@ -4,7 +4,7 @@ This repository provides everything you need to build and forecast a seasonal
 autoregressive integrated moving average (SARIMA) model in Python.  SARIMA
 is a classical statistical model designed to capture trend, seasonality and
 noise in time–series data.  It extends the widely used ARIMA model with
-seasonal components and can incorporate exogenous variables【852651330896506†L82-L110】.
+seasonal components and can incorporate exogenous variables
 
 ## Why SARIMA?
 
@@ -12,7 +12,7 @@ Time–series data often exhibit recurring patterns such as weekly, monthly or
 yearly cycles.  Capturing these *seasonal* patterns is important for
 generating accurate forecasts.  A SARIMA model decomposes a series into
 autoregressive (AR), integrated (I), moving–average (MA) and seasonal
-components【852651330896506†L100-L110】.  It is particularly useful when your data
+components.  It is particularly useful when your data
 exhibits both trend and seasonality and you want a model that is easier to
 interpret and faster to train than complex deep‑learning architectures.
 
@@ -50,7 +50,7 @@ sarima-time-series-forecasting/
 For demonstration purposes, the code downloads the well–known
 *AirPassengers* dataset, which contains monthly international airline
 passenger numbers from 1949 to 1960.  The dataset exhibits a clear
-monthly seasonality, making it a good example for a SARIMA model【852651330896506†L82-L96】.
+monthly seasonality, making it a good example for a SARIMA model.
 You can substitute your own time–series by providing a CSV file with a
 timestamp column and a numeric target column.
 
@@ -65,14 +65,14 @@ components:
   data you collected.
 - **Trend** – the smooth, long‑term increase or decrease in the series.
   For example, a rise in airline passenger numbers over several years
-  represents the trend component【767530250736748†L92-L119】.
+  represents the trend component.
 - **Seasonal** – the repeating short‑term cycles that occur at regular
   intervals, such as monthly spikes in sales or weekly patterns in
-  website traffic【71951480220652†L119-L127】.  A series may have multiple
+  website traffic.  A series may have multiple
   seasonalities (e.g., daily and yearly).
 - **Residual (random)** – the irregular fluctuations left after
   removing the trend and seasonality.  These residuals capture random
-  noise and unexpected events【71951480220652†L141-L149】.
+  noise and unexpected events.
 
 Decomposition is an exploratory tool: plotting these components helps
 you verify that a SARIMA model is appropriate.  If the trend or
@@ -134,7 +134,7 @@ SARIMA inherits the assumptions of ARIMA models.  To produce valid
 forecasts the following conditions should hold:
 
 1. **Stationarity** – after differencing (the `d` and `D` orders) the
-   series should have constant mean and variance over time【767530250736748†L48-L53】.
+   series should have constant mean and variance over time.
    You can check stationarity using unit‑root tests or by inspecting
    plots of the differenced series.
 2. **Uncorrelated residuals** – the residuals of the fitted model
@@ -142,9 +142,9 @@ forecasts the following conditions should hold:
    model has not captured all structure.  Researchers typically plot
    the residual autocorrelation function (ACF) and histogram to
    confirm that the residuals are uncorrelated and approximately
-   normally distributed【460460745925883†L403-L406】.
+   normally distributed.
 3. **Correct specification** – SARIMA assumes a linear relationship
-   between past values and errors【263046113061295†L265-L281】 and operates
+   between past values and errors and operates
    on a single variable; multivariate relationships are not handled.
 
 If these assumptions are violated, forecasts may be biased or the
@@ -157,13 +157,13 @@ or switching to more flexible models.
 The Akaike information criterion (AIC) and Bayesian information
 criterion (BIC) quantify the trade‑off between model fit and
 complexity.  Lower values indicate a more parsimonious model that
-still explains the data well【706520277493290†L360-L367】.  Both metrics are
+still explains the data well.  Both metrics are
 defined in terms of the maximized log‑likelihood \(\widehat{L}\) and the
 number of estimated parameters \(k\):
 
-- **AIC:** \(\mathrm{AIC} = 2k - 2\ln(\widehat{L})\)【702523714920972†L177-L183】.
+- **AIC:** \(\mathrm{AIC} = 2k - 2\ln(\widehat{L})\).
 - **BIC:** \(\mathrm{BIC} = k\ln(n) - 2\ln(\widehat{L})\) where \(n\) is the
-  number of observations【111783523217317†L210-L226】.
+  number of observations.
 
 Both criteria penalise complexity, but BIC uses the sample size
 \(\ln(n)\) as its penalty term and therefore penalises large models more
@@ -189,7 +189,7 @@ candidate models and choose the one with the lowest value.
 
 SARIMA (and its parent ARIMA) belongs to a class of **linear models** –
 the current value of the series is modeled as a linear function of
-past values and past forecast errors【263046113061295†L265-L281】.  As a result,
+past values and past forecast errors.  As a result,
 SARIMA excels at capturing linear trends and seasonal patterns but
 cannot describe complex nonlinear relationships inherent in some time
 series.  In practice, this limitation is often addressed by
